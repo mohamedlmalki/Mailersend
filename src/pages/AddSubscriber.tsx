@@ -31,7 +31,7 @@ export const AddSubscriber: React.FC = () => {
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [fromAddress, setFromAddress] = useState('');
-  const [fromName, setFromName] = useState(''); // NEW STATE
+  const [fromName, setFromName] = useState(''); 
   const [isSending, setIsSending] = useState(false);
   const [lastResponse, setLastResponse] = useState('');
 
@@ -102,12 +102,6 @@ export const AddSubscriber: React.FC = () => {
     setIsSending(true);
     const toastId = toast.loading("Sending email...");
 
-    // Construct correct "From" string
-    let finalFrom = fromAddress;
-    if (fromName.trim() && fromAddress.trim()) {
-      finalFrom = `${fromName.trim()} <${fromAddress.trim()}>`;
-    }
-
     try {
       const response = await fetch(`${apiUrl}/api/send-email`, {
         method: 'POST',
@@ -117,7 +111,8 @@ export const AddSubscriber: React.FC = () => {
           to,
           subject,
           content,
-          from: finalFrom // Send constructed string
+          fromEmail: fromAddress, // Updated: Send separately
+          fromName: fromName      // Updated: Send separately
         }),
       });
 
@@ -136,7 +131,6 @@ export const AddSubscriber: React.FC = () => {
       setTo('');
       setSubject('');
       setContent('');
-      // We don't clear fromAddress/fromName, keep it for next email
 
     } catch (error: any) {
       toast.error("Send Failed", { 
@@ -173,7 +167,7 @@ export const AddSubscriber: React.FC = () => {
         </div>
         <div>
           <h1 className="text-3xl font-bold text-foreground tracking-tight">Send Email</h1>
-          <p className="text-muted-foreground">Send transactional emails via Emailit</p>
+          <p className="text-muted-foreground">Send transactional emails via MailerSend</p>
         </div>
       </div>
 

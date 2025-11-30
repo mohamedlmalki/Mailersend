@@ -189,12 +189,6 @@ export const BulkJobProvider: React.FC<{ children: ReactNode }> = ({ children })
       const email = emails[i];
       const id = i + 1;
 
-      // Construct the "From" header string: "Name <email>"
-      let finalFrom = job.fromEmail;
-      if (job.fromName && job.fromEmail) {
-        finalFrom = `${job.fromName} <${job.fromEmail}>`;
-      }
-
       try {
         const response = await fetch(`${apiUrl}/api/send-email`, {
           method: 'POST',
@@ -204,7 +198,8 @@ export const BulkJobProvider: React.FC<{ children: ReactNode }> = ({ children })
             to: email,
             subject: getJob(accountId).subject,
             content: getJob(accountId).content,
-            from: finalFrom // Send the combined string
+            fromEmail: job.fromEmail, // Updated: Send separately
+            fromName: job.fromName    // Updated: Send separately
           }),
         });
 

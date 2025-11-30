@@ -1,10 +1,10 @@
 export interface ApiAccount {
   id: string;
   name: string;
-  apiKey?: string; 
-  secretKey: string;
+  apiKey?: string; // Optional legacy field
+  secretKey: string; // Used for MailerSend API Token
   fromEmail?: string;
-  defaultEventName?: string; // New optional field for default event name
+  // defaultEventName removed as requested
   status: 'connected' | 'disconnected' | 'checking';
   lastChecked?: Date;
   lastError?: any;

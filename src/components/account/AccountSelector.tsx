@@ -35,7 +35,6 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({ isCollapsed })
   const [newAccountName, setNewAccountName] = useState('');
   const [newAccountSecretKey, setNewAccountSecretKey] = useState('');
   const [newAccountFromEmail, setNewAccountFromEmail] = useState('');
-  const [newAccountEventName, setNewAccountEventName] = useState(''); // New State
 
   const handleStatusCheck = async () => {
     if (!currentAccount) return;
@@ -50,20 +49,18 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({ isCollapsed })
 
   const handleAddAccount = () => {
     if (!newAccountName.trim() || !newAccountSecretKey.trim()) {
-      toast.error("Error", { description: "Please fill in Name and Secret Key" });
+      toast.error("Error", { description: "Please fill in Name and API Token" });
       return;
     }
     addAccount({ 
       name: newAccountName.trim(), 
-      apiKey: "emailit-unused", 
+      apiKey: "mailersend-unused", 
       secretKey: newAccountSecretKey.trim(),
-      fromEmail: newAccountFromEmail.trim(),
-      defaultEventName: newAccountEventName.trim() // Used as default Audience ID
+      fromEmail: newAccountFromEmail.trim()
     });
     setNewAccountName('');
     setNewAccountSecretKey('');
     setNewAccountFromEmail('');
-    setNewAccountEventName('');
     setShowAddDialog(false);
     toast.success("Account Added");
   };
@@ -74,13 +71,11 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({ isCollapsed })
     const updates: Partial<ApiAccount> = {};
     if (newAccountSecretKey.trim()) updates.secretKey = newAccountSecretKey.trim();
     if (newAccountFromEmail.trim()) updates.fromEmail = newAccountFromEmail.trim();
-    if (newAccountEventName.trim()) updates.defaultEventName = newAccountEventName.trim();
     
     updateAccount(currentAccount.id, updates);
     
     setNewAccountSecretKey('');
     setNewAccountFromEmail('');
-    setNewAccountEventName('');
     setShowEditDialog(false);
     toast.success("Account Updated");
     
@@ -145,7 +140,6 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({ isCollapsed })
             name={newAccountName} setName={setNewAccountName} 
             secretKey={newAccountSecretKey} setSecretKey={setNewAccountSecretKey} 
             fromEmail={newAccountFromEmail} setFromEmail={setNewAccountFromEmail}
-            eventName={newAccountEventName} setEventName={setNewAccountEventName}
             onAdd={handleAddAccount} 
         />
       </div>
@@ -183,9 +177,9 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({ isCollapsed })
                 )} />
                 <div className="flex flex-col">
                     <span className="truncate max-w-[120px]">{account.name}</span>
-                    {(account.fromEmail || account.defaultEventName) && (
+                    {(account.fromEmail) && (
                       <span className="text-[9px] text-muted-foreground truncate max-w-[120px]">
-                        {account.fromEmail ? `From: ${account.fromEmail}` : `Audience: ${account.defaultEventName}`}
+                        From: {account.fromEmail}
                       </span>
                     )}
                 </div>
@@ -200,7 +194,6 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({ isCollapsed })
               <DropdownMenuItem onClick={() => { 
                 setNewAccountSecretKey(currentAccount.secretKey);
                 setNewAccountFromEmail(currentAccount.fromEmail || '');
-                setNewAccountEventName(currentAccount.defaultEventName || '');
                 setShowEditDialog(true); 
               }} className="cursor-pointer"><Edit className="h-4 w-4 mr-2" />Edit Account</DropdownMenuItem>
               <DropdownMenuItem onClick={handleDeleteAccount} className="text-destructive focus:text-destructive cursor-pointer"><Trash2 className="h-4 w-4 mr-2" />Delete Account</DropdownMenuItem>
@@ -221,7 +214,6 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({ isCollapsed })
         name={newAccountName} setName={setNewAccountName} 
         secretKey={newAccountSecretKey} setSecretKey={setNewAccountSecretKey} 
         fromEmail={newAccountFromEmail} setFromEmail={setNewAccountFromEmail}
-        eventName={newAccountEventName} setEventName={setNewAccountEventName}
         onAdd={handleAddAccount} 
       />
       <EditAccountDialog 
@@ -229,7 +221,6 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({ isCollapsed })
         onOpenChange={setShowEditDialog} 
         secretKey={newAccountSecretKey} setSecretKey={setNewAccountSecretKey} 
         fromEmail={newAccountFromEmail} setFromEmail={setNewAccountFromEmail}
-        eventName={newAccountEventName} setEventName={setNewAccountEventName}
         onSave={handleEditAccount} 
       />
       
@@ -259,31 +250,24 @@ export const AccountSelector: React.FC<AccountSelectorProps> = ({ isCollapsed })
   );
 };
 
-// UPDATED: Dialog UI labels to "Default Audience ID"
-const AddAccountDialog = ({ open, onOpenChange, name, setName, secretKey, setSecretKey, fromEmail, setFromEmail, eventName, setEventName, onAdd }: any) => (
+// Add Account Dialog
+const AddAccountDialog = ({ open, onOpenChange, name, setName, secretKey, setSecretKey, fromEmail, setFromEmail, onAdd }: any) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
     <DialogContent>
       <DialogHeader><DialogTitle>Add New Account</DialogTitle></DialogHeader>
       <div className="space-y-4 py-2">
         <div className="space-y-2">
             <Label>Account Name *</Label>
-            <Input placeholder="My Emailit Account" value={name} onChange={(e) => setName(e.target.value)} />
+            <Input placeholder="My MailerSend Account" value={name} onChange={(e) => setName(e.target.value)} />
         </div>
         <div className="space-y-2">
-            <Label>Emailit Secret Key *</Label>
-            <Input type="password" placeholder="em_..." value={secretKey} onChange={(e) => setSecretKey(e.target.value)} />
-            <p className="text-[10px] text-muted-foreground">Found in Emailit Dashboard &gt; Credentials</p>
+            <Label>MailerSend API Token *</Label>
+            <Input type="password" placeholder="mlsn..." value={secretKey} onChange={(e) => setSecretKey(e.target.value)} />
+            <p className="text-[10px] text-muted-foreground">Found in MailerSend Dashboard &gt; Integrations</p>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-                <Label>Default "From" (Optional)</Label>
-                <Input placeholder="me@example.com" value={fromEmail} onChange={(e) => setFromEmail(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-                {/* UPDATED LABEL */}
-                <Label>Default Audience ID (Optional)</Label>
-                <Input placeholder="aud_xxxxxxxx" value={eventName} onChange={(e) => setEventName(e.target.value)} />
-            </div>
+        <div className="space-y-2">
+            <Label>Default "From" (Optional)</Label>
+            <Input placeholder="me@example.com" value={fromEmail} onChange={(e) => setFromEmail(e.target.value)} />
         </div>
         <div className="flex justify-end space-x-2 pt-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
@@ -294,26 +278,19 @@ const AddAccountDialog = ({ open, onOpenChange, name, setName, secretKey, setSec
   </Dialog>
 );
 
-// UPDATED: Dialog UI labels to "Default Audience ID"
-const EditAccountDialog = ({ open, onOpenChange, secretKey, setSecretKey, fromEmail, setFromEmail, eventName, setEventName, onSave }: any) => (
+// Edit Account Dialog
+const EditAccountDialog = ({ open, onOpenChange, secretKey, setSecretKey, fromEmail, setFromEmail, onSave }: any) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
     <DialogContent>
       <DialogHeader><DialogTitle>Edit Account</DialogTitle></DialogHeader>
       <div className="space-y-4 py-2">
         <div className="space-y-2">
-            <Label>Emailit Secret Key</Label>
-            <Input type="password" placeholder="em_..." value={secretKey} onChange={(e) => setSecretKey(e.target.value)} />
+            <Label>MailerSend API Token</Label>
+            <Input type="password" placeholder="mlsn..." value={secretKey} onChange={(e) => setSecretKey(e.target.value)} />
         </div>
-        <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-                <Label>Default "From"</Label>
-                <Input placeholder="me@example.com" value={fromEmail} onChange={(e) => setFromEmail(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-                {/* UPDATED LABEL */}
-                <Label>Default Audience ID</Label>
-                <Input placeholder="aud_xxxxxxxx" value={eventName} onChange={(e) => setEventName(e.target.value)} />
-            </div>
+        <div className="space-y-2">
+            <Label>Default "From"</Label>
+            <Input placeholder="me@example.com" value={fromEmail} onChange={(e) => setFromEmail(e.target.value)} />
         </div>
         <div className="flex justify-end space-x-2 pt-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>

@@ -38,7 +38,7 @@ export const AccountProvider: React.FC<AccountProviderProps> = ({ children }) =>
         
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("text/html")) {
-           throw new Error("Backend unreachable (Received HTML). Is server.js running on port 3006?");
+           throw new Error("Backend unreachable (Received HTML). Is server.js running?");
         }
 
         if (!response.ok) throw new Error('Server unreachable');
@@ -122,7 +122,6 @@ export const AccountProvider: React.FC<AccountProviderProps> = ({ children }) =>
       const response = await fetch(`${apiUrl}/api/check-status`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Only sending secretKey now
         body: JSON.stringify({ 
           secretKey: account.secretKey 
         }),
@@ -143,7 +142,7 @@ export const AccountProvider: React.FC<AccountProviderProps> = ({ children }) =>
       });
       return { success: false, message: "Failed" };
     }
-};
+  };
 
   return (
     <AccountContext.Provider value={{ accounts, currentAccount, setCurrentAccount, addAccount, updateAccount, deleteAccount, checkAccountStatus }}>

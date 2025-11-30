@@ -1,143 +1,186 @@
 [
   {
     "name": "1",
-    "apiKey": "emailit-unused",
-    "secretKey": "em_RJiyCI84zNnlbZnNuX5b6gDDh7nSTGZS",
-    "fromEmail": "no-reply@postesrt.com",
-    "defaultEventName": "",
-    "id": "bd3306e6-cbe0-4b0f-8431-1337d5d6ba10",
+    "apiKey": "mailersend-unused",
+    "secretKey": "mlsn.a212c880403f0cce49571aa70a9c026b12a52acc6635b14397a2e9de1d148022",
+    "fromEmail": "test@test-3m5jgromykogdpyo.mlsender.net",
+    "id": "10ed1348-4809-490b-b8db-2e3b5518fbf8",
     "status": "connected",
-    "lastChecked": "2025-11-28T02:14:29.462Z",
+    "lastChecked": "2025-11-30T07:13:14.169Z",
     "lastResponse": {
       "data": [
         {
-          "id": 14069,
-          "name": "postesrt.com",
-          "dns_checked_at": "2025-11-27T08:20:30.000000Z",
-          "spf_status": "ok",
-          "spf_error": null,
-          "dkim_status": "ok",
-          "dkim_error": null,
-          "mx_status": null,
-          "mx_error": null,
-          "dmarc_status": "ok",
-          "dmarc_error": null,
-          "return_path_status": "ok",
-          "return_path_error": null,
-          "last_used_at": null,
-          "updated_at": "2025-11-27T08:20:30.000000Z",
-          "created_at": "2025-11-27T08:18:37.000000Z",
-          "dns_records": [
-            {
-              "required": true,
-              "type": "MX",
-              "name": "emailit.postesrt.com",
-              "value": "feedback-smtp.ffdc-1.emailit.com",
-              "priority": 10,
-              "ttl": "auto",
-              "status": "ok",
-              "error": null
-            },
-            {
-              "required": true,
-              "type": "TXT",
-              "name": "emailit.postesrt.com",
-              "value": "v=spf1 include:_spf.emailit.com ~all",
-              "priority": null,
-              "ttl": "auto",
-              "status": "ok",
-              "error": null
-            },
-            {
-              "required": true,
-              "type": "TXT",
-              "name": "emailit._domainkey.postesrt.com",
-              "value": "v=DKIM1; t=s; h=sha256; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAj7MyfvWacVrRqQ5KhARVNw8h+kHyF0ZU0pGneY2nSrGfRhOywgWrDHWUf+hP4W+1SMmB5gfIf+p9zd2NsCpDvXDO2406dO9PMtWazA53d3rwW+nxq4opQHSyFg9bVpNoJ9yonQ2oeHmf9VAe3eLr7H7A/4uBus1pWDDsJyol+QIDAQAB;",
-              "priority": null,
-              "ttl": "auto",
-              "status": "ok",
-              "error": null
-            },
-            {
-              "required": false,
-              "type": "TXT",
-              "name": "_dmarc.postesrt.com",
-              "value": "v=DMARC1; p=none;",
-              "priority": null,
-              "ttl": "auto",
-              "status": "ok",
-              "error": null
-            }
-          ],
-          "track_loads": 1,
-          "track_clicks": 1,
-          "verified_at": "2025-11-27T08:20:30.000000Z"
-        },
-        {
-          "id": 14117,
-          "name": "petsforlovers.com",
-          "dns_checked_at": "2025-11-28T01:28:33.000000Z",
-          "spf_status": "ok",
-          "spf_error": null,
-          "dkim_status": "ok",
-          "dkim_error": null,
-          "mx_status": null,
-          "mx_error": null,
-          "dmarc_status": "ok",
-          "dmarc_error": null,
-          "return_path_status": "ok",
-          "return_path_error": null,
-          "last_used_at": null,
-          "updated_at": "2025-11-28T01:28:38.000000Z",
-          "created_at": "2025-11-28T01:25:07.000000Z",
-          "dns_records": [
-            {
-              "required": true,
-              "type": "MX",
-              "name": "emailit.petsforlovers.com",
-              "value": "feedback-smtp.ffdc-1.emailit.com",
-              "priority": 10,
-              "ttl": "auto",
-              "status": "ok",
-              "error": null
-            },
-            {
-              "required": true,
-              "type": "TXT",
-              "name": "emailit.petsforlovers.com",
-              "value": "v=spf1 include:_spf.emailit.com ~all",
-              "priority": null,
-              "ttl": "auto",
-              "status": "ok",
-              "error": null
-            },
-            {
-              "required": true,
-              "type": "TXT",
-              "name": "emailit._domainkey.petsforlovers.com",
-              "value": "v=DKIM1; t=s; h=sha256; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQClFQwNuLJJo2iMkxFy8es7n2m5Q6hayF0L+A2/eUvVv3IFS3jFvd9GdqB5ja7HSBAlHgwojpp09Q7xQ5aF3v/BeQPnbCux9l8mCBhhgkW3W61ogb50BpNbtXhBI/c/q3zR7Vea+ol/d0LQ7Ip6fXGgWYtzvp/92sVKSXk36vuAIQIDAQAB;",
-              "priority": null,
-              "ttl": "auto",
-              "status": "ok",
-              "error": null
-            },
-            {
-              "required": false,
-              "type": "TXT",
-              "name": "_dmarc.petsforlovers.com",
-              "value": "v=DMARC1; p=none;",
-              "priority": null,
-              "ttl": "auto",
-              "status": "ok",
-              "error": null
-            }
-          ],
-          "track_loads": 1,
-          "track_clicks": 1,
-          "verified_at": "2025-11-28T01:28:33.000000Z"
+          "id": "yxj6lj9mmv74do2r",
+          "name": "test-3m5jgromykogdpyo.mlsender.net",
+          "dkim": true,
+          "spf": true,
+          "tracking": false,
+          "is_verified": true,
+          "is_cname_verified": false,
+          "is_dns_active": true,
+          "is_cname_active": false,
+          "is_tracking_allowed": false,
+          "domain_stats": {
+            "total": 0,
+            "queued": 0,
+            "sent": 0,
+            "rejected": 0,
+            "delivered": 0
+          },
+          "has_not_queued_messages": false,
+          "not_queued_messages_count": 0,
+          "domain_settings": {
+            "send_paused": false,
+            "track_clicks": true,
+            "track_opens": true,
+            "track_opens_pixel_on_top": false,
+            "track_unsubscribe": false,
+            "track_unsubscribe_html": "<p>Click here to <a href=\"{{unsubscribe}}\">unsubscribe</a></p>",
+            "track_unsubscribe_html_enabled": false,
+            "track_unsubscribe_plain": "Click here to unsubscribe: {{unsubscribe}}",
+            "track_unsubscribe_plain_enabled": false,
+            "track_content": false,
+            "custom_tracking_enabled": false,
+            "custom_tracking_subdomain": "email",
+            "return_path_subdomain": "mta",
+            "inbound_routing_enabled": false,
+            "inbound_routing_subdomain": "inbound",
+            "precedence_bulk": false,
+            "ignore_duplicated_recipients": false,
+            "show_dmarc": false
+          },
+          "created_at": "2025-11-30T07:07:34.000000Z",
+          "updated_at": "2025-11-30T07:09:04.000000Z",
+          "totals": []
         }
       ],
-      "total_records": 2
+      "links": {
+        "first": "https://api.mailersend.com/v1/domains?page=1",
+        "last": "https://api.mailersend.com/v1/domains?page=1",
+        "prev": null,
+        "next": null
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "links": [
+          {
+            "url": null,
+            "label": "&laquo; Previous",
+            "page": null,
+            "active": false
+          },
+          {
+            "url": "https://api.mailersend.com/v1/domains?page=1",
+            "label": "1",
+            "page": 1,
+            "active": true
+          },
+          {
+            "url": null,
+            "label": "Next &raquo;",
+            "page": null,
+            "active": false
+          }
+        ],
+        "path": "https://api.mailersend.com/v1/domains",
+        "per_page": 25,
+        "to": 1,
+        "total": 1
+      }
+    }
+  },
+  {
+    "name": "2",
+    "apiKey": "mailersend-unused",
+    "secretKey": "mlsn.aa473c74f6e84a8a6208642c6a9850fef51749037f43d2fdea327bce81fa7489",
+    "fromEmail": "carr@test-51ndgwvky6rlzqx8.mlsender.net",
+    "id": "d9677289-270a-49ae-87a3-1fdfd9f697ad",
+    "status": "connected",
+    "lastChecked": "2025-11-30T07:13:37.762Z",
+    "lastResponse": {
+      "data": [
+        {
+          "id": "2p0347zppoplzdrn",
+          "name": "test-51ndgwvky6rlzqx8.mlsender.net",
+          "dkim": true,
+          "spf": true,
+          "tracking": false,
+          "is_verified": true,
+          "is_cname_verified": false,
+          "is_dns_active": true,
+          "is_cname_active": false,
+          "is_tracking_allowed": false,
+          "domain_stats": {
+            "total": 0,
+            "queued": 0,
+            "sent": 0,
+            "rejected": 0,
+            "delivered": 0
+          },
+          "has_not_queued_messages": false,
+          "not_queued_messages_count": 0,
+          "domain_settings": {
+            "send_paused": false,
+            "track_clicks": true,
+            "track_opens": true,
+            "track_opens_pixel_on_top": false,
+            "track_unsubscribe": false,
+            "track_unsubscribe_html": "<p>Click here to <a href=\"{{unsubscribe}}\">unsubscribe</a></p>",
+            "track_unsubscribe_html_enabled": false,
+            "track_unsubscribe_plain": "Click here to unsubscribe: {{unsubscribe}}",
+            "track_unsubscribe_plain_enabled": false,
+            "track_content": false,
+            "custom_tracking_enabled": false,
+            "custom_tracking_subdomain": "email",
+            "return_path_subdomain": "mta",
+            "inbound_routing_enabled": false,
+            "inbound_routing_subdomain": "inbound",
+            "precedence_bulk": false,
+            "ignore_duplicated_recipients": false,
+            "show_dmarc": false
+          },
+          "created_at": "2025-11-30T07:11:26.000000Z",
+          "updated_at": "2025-11-30T07:11:29.000000Z",
+          "totals": []
+        }
+      ],
+      "links": {
+        "first": "https://api.mailersend.com/v1/domains?page=1",
+        "last": "https://api.mailersend.com/v1/domains?page=1",
+        "prev": null,
+        "next": null
+      },
+      "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "links": [
+          {
+            "url": null,
+            "label": "&laquo; Previous",
+            "page": null,
+            "active": false
+          },
+          {
+            "url": "https://api.mailersend.com/v1/domains?page=1",
+            "label": "1",
+            "page": 1,
+            "active": true
+          },
+          {
+            "url": null,
+            "label": "Next &raquo;",
+            "page": null,
+            "active": false
+          }
+        ],
+        "path": "https://api.mailersend.com/v1/domains",
+        "per_page": 25,
+        "to": 1,
+        "total": 1
+      }
     }
   }
 ]

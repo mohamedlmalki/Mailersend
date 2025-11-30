@@ -70,97 +70,89 @@ app.delete('/api/accounts/:id', async (req, res) => {
   } catch (e) { res.status(500).json({ error: "DB Error" }); }
 });
 
-// --- Auth Check (v1) ---
+// --- Auth Check (MailerSend) ---
 app.post('/api/check-status', async (req, res) => {
     const { secretKey } = req.body;
-    if (!secretKey) return res.status(400).json({ message: 'Missing Secret Key' });
+    if (!secretKey) return res.status(400).json({ message: 'Missing API Token' });
 
     try {
-        const response = await axios.get('https://api.emailit.com/v1/sending-domains', {
+        const response = await axios.get('https://api.mailersend.com/v1/domains', {
             headers: { 
                 'Authorization': `Bearer ${secretKey}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Content-Type': 'application/json'
             }
         });
-        res.json({ success: true, message: 'Connected to Emailit (v1).', data: response.data });
+        res.json({ success: true, message: 'Connected to MailerSend.', data: response.data });
     } catch (error) {
-        res.status(401).json({ success: false, message: 'Authentication Failed' });
+        console.error("Auth Error:", error.response?.data || error.message);
+        res.status(401).json({ success: false, message: 'Authentication Failed', details: error.response?.data });
     }
 });
 
-// --- Send Email (v1 - FIXED HTML/TEXT ISSUE) ---
+// --- Send Email (MailerSend) ---
 app.post('/api/send-email', async (req, res) => {
-    const { accountId, to, subject, content, from } = req.body;
-    if (!accountId || !to || !subject || !content) return res.status(400).json({ error: "Missing parameters" });
+    const { accountId, to, subject, content, fromEmail, fromName } = req.body;
+    
+    if (!accountId || !to || !subject || !content) {
+        return res.status(400).json({ error: "Missing parameters" });
+    }
 
     try {
         const accounts = await readJsonFile(accountsFilePath);
         const account = accounts.find(a => a.id === accountId);
         if (!account) return res.status(404).json({ error: "Account not found" });
 
-        // 1. Prepare HTML: Ensure it is wrapped in <html><body> tags
+        // 1. Determine Sender Details
+        const senderEmail = fromEmail || account.fromEmail;
+        const senderName = fromName;
+
+        if (!senderEmail) {
+            return res.status(400).json({ error: "No 'From Email' specified." });
+        }
+
+        // 2. Prepare HTML (Ensure basic structure exists)
         let htmlContent = content;
         if (!htmlContent.trim().toLowerCase().startsWith('<html') && !htmlContent.includes('<body')) {
             htmlContent = `<!DOCTYPE html><html><body>${content}</body></html>`;
         }
 
-        // 2. Prepare Text: Ensure it is not empty (Emailit requires non-empty string)
+        // 3. Prepare Plain Text
         let textContent = String(content).replace(/<[^>]*>?/gm, " ").trim();
         if (!textContent || textContent.length === 0) {
             textContent = "Please view this email in an HTML compatible email client.";
         }
 
         const payload = {
-            to: to,
+            from: { email: senderEmail, name: senderName || undefined },
+            to: [{ email: to, name: to }],
             subject: subject,
-            html: htmlContent, // Use wrapped HTML
-            text: textContent  // Use valid text
+            html: htmlContent,
+            text: textContent
         };
+
+        const response = await axios.post('https://api.mailersend.com/v1/email', payload, {
+            headers: {
+                'Authorization': `Bearer ${account.secretKey}`,
+                'Content-Type': 'application/json'
+            }
+        });
         
-        if (from) payload.from = from;
-
-        const response = await axios.post('https://api.emailit.com/v1/emails', payload, {
-            headers: {
-                'Authorization': `Bearer ${account.secretKey}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
+        res.json({ 
+            success: true, 
+            messageId: response.headers['x-message-id'],
+            status: response.status 
         });
-        res.json(response.data);
+
     } catch (error) {
-        console.error("Emailit Send Error:", error.response?.data || error.message);
-        res.status(error.response?.status || 500).json({ error: "Failed to send email", details: error.response?.data });
+        console.error("Send Error:", error.response?.data || error.message);
+        res.status(error.response?.status || 500).json({ 
+            error: "Failed to send email", 
+            details: error.response?.data 
+        });
     }
 });
 
-// --- Add to Audience (v1) ---
-app.post('/api/track-event', async (req, res) => {
-    const { accountId, event, email, data } = req.body; 
-    if (!accountId || !event || !email) return res.status(400).json({ error: "Missing parameters" });
-
-    try {
-        const accounts = await readJsonFile(accountsFilePath);
-        const account = accounts.find(a => a.id === accountId);
-        if (!account) return res.status(404).json({ error: "Account not found" });
-
-        const response = await axios.post(`https://api.emailit.com/v1/audiences/${event}/subscribers`, {
-            email: email,
-            custom_fields: data || {}
-        }, {
-            headers: {
-                'Authorization': `Bearer ${account.secretKey}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        });
-        res.json(response.data);
-    } catch (error) {
-        res.status(error.response?.status || 500).json({ error: "Failed to add subscriber", details: error.response?.data });
-    }
-});
-
-// --- Analytics / Logs (v1) ---
+// --- Analytics / Activity Logs (MailerSend Activity API) ---
 app.get('/api/email/log', async (req, res) => {
     const { accountId, limit = 25, page = 1, status } = req.query;
 
@@ -169,62 +161,80 @@ app.get('/api/email/log', async (req, res) => {
         const account = accounts.find(a => a.id === accountId);
         if (!account) return res.status(404).json({ error: "Account not found" });
 
+        // 1. Get Domain ID (MailerSend requires a domain_id to fetch activity)
+        // We fetch the first verified domain associated with the token.
+        const domainResponse = await axios.get('https://api.mailersend.com/v1/domains', {
+            headers: { 'Authorization': `Bearer ${account.secretKey}` }
+        });
+
+        const domainId = domainResponse.data.data?.[0]?.id;
+        if (!domainId) {
+            return res.json({ success: true, data: [], message: "No domains found for this token." });
+        }
+
+        // 2. Prepare Activity Filters
         const params = {
-            per_page: limit, 
-            page: page
+            limit: limit,
+            page: page,
         };
 
-        if (status === 'delivered') params['filter[type]'] = 'email.delivery.sent';
-        if (status === 'failed') params['filter[type]'] = 'email.delivery.hardfail'; 
-        if (status === 'opened') params['filter[type]'] = 'email.loaded';
-        if (status === 'clicked') params['filter[type]'] = 'email.link.clicked';
+        // Map frontend "status" to MailerSend "event" types
+        if (status === 'delivered') params.event = ['delivered'];
+        if (status === 'failed') params.event = ['soft_bounced', 'hard_bounced'];
+        if (status === 'opened') params.event = ['opened'];
+        if (status === 'clicked') params.event = ['clicked'];
+        if (status === 'spam') params.event = ['spam_complaint', 'junk'];
 
-        const response = await axios.get('https://api.emailit.com/v1/events', {
-            headers: { 
-                'Authorization': `Bearer ${account.secretKey}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
+        // 3. Fetch Activity
+        const response = await axios.get(`https://api.mailersend.com/v1/activity/${domainId}`, {
+            headers: { 'Authorization': `Bearer ${account.secretKey}` },
             params: params
         });
 
-        const logs = response.data.data.map(event => {
-            const data = event.data || {};
-            const emailObj = data.object?.email || {}; 
+        // 4. Transform Response for Frontend
+        const logs = response.data.data.map(activity => {
             
-            let status = 'processing';
-            if (event.type.includes('sent') || event.type.includes('delivery.sent')) status = 'delivered';
-            else if (event.type.includes('fail') || event.type.includes('bounce') || event.type.includes('error')) status = 'failed';
-            else if (event.type.includes('loaded') || event.type.includes('open')) status = 'opened';
-            else if (event.type.includes('click')) status = 'clicked';
-            else if (event.type.includes('held') || event.type.includes('spam')) status = 'spam';
+            // Map MailerSend types back to Frontend statuses
+            let displayStatus = 'processing';
+            if (activity.type === 'sent' || activity.type === 'delivered') displayStatus = 'delivered';
+            else if (activity.type.includes('bounced')) displayStatus = 'failed';
+            else if (activity.type === 'opened') displayStatus = 'opened';
+            else if (activity.type === 'clicked') displayStatus = 'clicked';
+            else if (activity.type === 'spam_complaint') displayStatus = 'spam';
 
             return {
-                id: event.id,
-                type: event.type,
-                to: emailObj.to || 'Unknown',
-                from: emailObj.from || 'Unknown',
-                subject: emailObj.subject || 'No Subject',
-                status: status,
-                detailedStatus: event.type.replace('email.', '').replace('delivery.', ''),
-                sentAt: event.created_at || new Date().toISOString(),
-                errorMessage: (status === 'failed') ? (data.details || event.type) : null
+                id: activity.id,
+                type: activity.type, // e.g. "soft_bounced"
+                to: activity.recipient?.email || 'Unknown',
+                from: activity.email?.from || 'Unknown',
+                subject: activity.email?.subject || 'No Subject',
+                status: displayStatus, 
+                detailedStatus: activity.type.replace('_', ' '), // Clean up "soft_bounced" -> "soft bounced"
+                sentAt: activity.created_at,
+                errorMessage: null // MailerSend activity log rarely sends explicit error text in the list view
             };
         });
 
         res.json({ 
             success: true, 
-            data: logs, 
-            pagination: { page: Number(page), limit: Number(limit), total: 100, totalPages: 5 } 
+            data: logs,
+            // MailerSend pagination metadata
+            pagination: response.data.meta ? {
+                page: response.data.meta.current_page,
+                limit: response.data.meta.per_page,
+                total: response.data.meta.total,
+                totalPages: response.data.meta.last_page
+            } : {}
         });
 
     } catch (error) {
-        console.error("Emailit Logs Error:", error.response?.data || error.message);
-        if (error.response?.status === 401) {
-             return res.status(401).json({ error: "Unauthorized: Please check API Key permissions." });
-        }
+        console.error("Logs Error:", error.response?.data || error.message);
         res.status(500).json({ error: "Failed to fetch logs" });
     }
+});
+
+app.post('/api/track-event', async (req, res) => {
+     res.status(501).json({ error: "Endpoint pending migration to MailerSend" });
 });
 
 app.listen(port, () => {
