@@ -1,0 +1,300 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ultra-Modern Newsletter Management Design System */
+
+@layer base {
+  :root {
+    /* Light Mode - Clean Whites and Grays */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+
+    /* Primary - Modern Purple */
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --primary-soft: 263 70% 68%;
+    --primary-light: 262 83% 58%;
+    --primary-glow: 270 91% 77%;
+
+    /* Secondary - Light Neutrals */
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted Elements */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    /* Accent - Success Green */
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Status Colors */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --success-soft: 142 69% 58%;
+    --success-light: 138 76% 97%;
+
+    --warning: 43 96% 56%;
+    --warning-foreground: 0 0% 9%;
+    --warning-soft: 48 100% 67%;
+    --warning-light: 48 100% 96%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-soft: 0 91% 71%;
+    --destructive-light: 0 86% 97%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar System */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 9%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 215 16% 47%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 262 83% 58%;
+  }
+
+  .dark {
+    /* Dark Mode - Deep Blacks and Whites */
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Primary - Bright Purple */
+    --primary: 270 91% 77%;
+    --primary-foreground: 0 0% 4%;
+    --primary-soft: 263 70% 68%;
+    --primary-light: 262 83% 58%;
+    --primary-glow: 270 91% 77%;
+
+    /* Secondary - Dark Neutrals */
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 85%;
+
+    /* Muted Elements */
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    /* Accent - Bright Green */
+    --accent: 142 69% 58%;
+    --accent-foreground: 0 0% 4%;
+
+    /* Status Colors - Dark Mode */
+    --success: 142 69% 58%;
+    --success-foreground: 0 0% 4%;
+    --success-soft: 142 76% 36%;
+    --success-light: 142 76% 12%;
+
+    --warning: 48 100% 67%;
+    --warning-foreground: 0 0% 4%;
+    --warning-soft: 43 96% 56%;
+    --warning-light: 43 96% 15%;
+
+    --destructive: 0 91% 71%;
+    --destructive-foreground: 0 0% 4%;
+    --destructive-soft: 0 84% 60%;
+    --destructive-light: 0 84% 15%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 270 91% 77%;
+
+    /* Dark Sidebar */
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 270 91% 77%;
+    --sidebar-primary-foreground: 0 0% 4%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 65%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 270 91% 77%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-variation-settings: "opsz" 32;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-inter font-semibold tracking-tight;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer components {
+  /* Status Indicators */
+  .status-dot {
+    @apply w-2 h-2 rounded-full transition-all duration-300 ease-out;
+  }
+  
+  .status-dot.connected {
+    @apply bg-success;
+    box-shadow: 0 0 0 2px hsl(var(--success) / 0.2);
+  }
+  
+  .status-dot.disconnected {
+    @apply bg-destructive;
+    box-shadow: 0 0 0 2px hsl(var(--destructive) / 0.2);
+  }
+  
+  .status-dot.checking {
+    @apply bg-warning animate-pulse;
+    box-shadow: 0 0 0 2px hsl(var(--warning) / 0.2);
+  }
+
+  /* Glass Morphism Effects */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    @apply shadow-xl;
+  }
+
+  .glass-card {
+    @apply glass rounded-2xl;
+  }
+
+  /* Premium Gradients */
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(262 83% 58%), hsl(270 91% 77%));
+  }
+
+  .gradient-secondary {
+    background: linear-gradient(135deg, hsl(0 0% 98%), hsl(210 40% 96%));
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(262 83% 58%), hsl(270 91% 77%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Modern Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  /* Hover Effects */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-lift:hover {
+    @apply -translate-y-1 shadow-xl;
+  }
+
+  /* Focus States */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  /* Premium Button Styles */
+  .btn-premium {
+    @apply relative overflow-hidden bg-gradient-primary text-white font-medium px-6 py-3 rounded-xl;
+    @apply shadow-colored hover:shadow-xl transition-all duration-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  }
+
+  .btn-premium:hover {
+    @apply scale-105 brightness-110;
+  }
+
+  .btn-premium:active {
+    @apply scale-95;
+  }
+
+  /* Code/Monospace Elements */
+  .font-mono {
+    font-family: 'JetBrains Mono', 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-feature-settings: "liga", "calt";
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}

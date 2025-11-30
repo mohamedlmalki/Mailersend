@@ -1,0 +1,143 @@
+[
+  {
+    "name": "1",
+    "apiKey": "emailit-unused",
+    "secretKey": "em_RJiyCI84zNnlbZnNuX5b6gDDh7nSTGZS",
+    "fromEmail": "no-reply@postesrt.com",
+    "defaultEventName": "",
+    "id": "bd3306e6-cbe0-4b0f-8431-1337d5d6ba10",
+    "status": "connected",
+    "lastChecked": "2025-11-28T02:14:29.462Z",
+    "lastResponse": {
+      "data": [
+        {
+          "id": 14069,
+          "name": "postesrt.com",
+          "dns_checked_at": "2025-11-27T08:20:30.000000Z",
+          "spf_status": "ok",
+          "spf_error": null,
+          "dkim_status": "ok",
+          "dkim_error": null,
+          "mx_status": null,
+          "mx_error": null,
+          "dmarc_status": "ok",
+          "dmarc_error": null,
+          "return_path_status": "ok",
+          "return_path_error": null,
+          "last_used_at": null,
+          "updated_at": "2025-11-27T08:20:30.000000Z",
+          "created_at": "2025-11-27T08:18:37.000000Z",
+          "dns_records": [
+            {
+              "required": true,
+              "type": "MX",
+              "name": "emailit.postesrt.com",
+              "value": "feedback-smtp.ffdc-1.emailit.com",
+              "priority": 10,
+              "ttl": "auto",
+              "status": "ok",
+              "error": null
+            },
+            {
+              "required": true,
+              "type": "TXT",
+              "name": "emailit.postesrt.com",
+              "value": "v=spf1 include:_spf.emailit.com ~all",
+              "priority": null,
+              "ttl": "auto",
+              "status": "ok",
+              "error": null
+            },
+            {
+              "required": true,
+              "type": "TXT",
+              "name": "emailit._domainkey.postesrt.com",
+              "value": "v=DKIM1; t=s; h=sha256; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAj7MyfvWacVrRqQ5KhARVNw8h+kHyF0ZU0pGneY2nSrGfRhOywgWrDHWUf+hP4W+1SMmB5gfIf+p9zd2NsCpDvXDO2406dO9PMtWazA53d3rwW+nxq4opQHSyFg9bVpNoJ9yonQ2oeHmf9VAe3eLr7H7A/4uBus1pWDDsJyol+QIDAQAB;",
+              "priority": null,
+              "ttl": "auto",
+              "status": "ok",
+              "error": null
+            },
+            {
+              "required": false,
+              "type": "TXT",
+              "name": "_dmarc.postesrt.com",
+              "value": "v=DMARC1; p=none;",
+              "priority": null,
+              "ttl": "auto",
+              "status": "ok",
+              "error": null
+            }
+          ],
+          "track_loads": 1,
+          "track_clicks": 1,
+          "verified_at": "2025-11-27T08:20:30.000000Z"
+        },
+        {
+          "id": 14117,
+          "name": "petsforlovers.com",
+          "dns_checked_at": "2025-11-28T01:28:33.000000Z",
+          "spf_status": "ok",
+          "spf_error": null,
+          "dkim_status": "ok",
+          "dkim_error": null,
+          "mx_status": null,
+          "mx_error": null,
+          "dmarc_status": "ok",
+          "dmarc_error": null,
+          "return_path_status": "ok",
+          "return_path_error": null,
+          "last_used_at": null,
+          "updated_at": "2025-11-28T01:28:38.000000Z",
+          "created_at": "2025-11-28T01:25:07.000000Z",
+          "dns_records": [
+            {
+              "required": true,
+              "type": "MX",
+              "name": "emailit.petsforlovers.com",
+              "value": "feedback-smtp.ffdc-1.emailit.com",
+              "priority": 10,
+              "ttl": "auto",
+              "status": "ok",
+              "error": null
+            },
+            {
+              "required": true,
+              "type": "TXT",
+              "name": "emailit.petsforlovers.com",
+              "value": "v=spf1 include:_spf.emailit.com ~all",
+              "priority": null,
+              "ttl": "auto",
+              "status": "ok",
+              "error": null
+            },
+            {
+              "required": true,
+              "type": "TXT",
+              "name": "emailit._domainkey.petsforlovers.com",
+              "value": "v=DKIM1; t=s; h=sha256; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQClFQwNuLJJo2iMkxFy8es7n2m5Q6hayF0L+A2/eUvVv3IFS3jFvd9GdqB5ja7HSBAlHgwojpp09Q7xQ5aF3v/BeQPnbCux9l8mCBhhgkW3W61ogb50BpNbtXhBI/c/q3zR7Vea+ol/d0LQ7Ip6fXGgWYtzvp/92sVKSXk36vuAIQIDAQAB;",
+              "priority": null,
+              "ttl": "auto",
+              "status": "ok",
+              "error": null
+            },
+            {
+              "required": false,
+              "type": "TXT",
+              "name": "_dmarc.petsforlovers.com",
+              "value": "v=DMARC1; p=none;",
+              "priority": null,
+              "ttl": "auto",
+              "status": "ok",
+              "error": null
+            }
+          ],
+          "track_loads": 1,
+          "track_clicks": 1,
+          "verified_at": "2025-11-28T01:28:33.000000Z"
+        }
+      ],
+      "total_records": 2
+    }
+  }
+]
